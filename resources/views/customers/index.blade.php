@@ -12,6 +12,10 @@
                 Add Customer
             </a>
 
+            <a href="{{ route('customers.export') }}" class="bg-green-700 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
+                Export Customer
+            </a>
+
 
             <div class="relative overflow-x-auto">
                 <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">

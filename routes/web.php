@@ -27,6 +27,8 @@ Route::middleware('auth','abdurrahman')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::resource('customers', CustomerController::class);
+    Route::get('/customers-export', [CustomerController::class, 'export'])->name('customers.export');
+
 });
 
 require __DIR__.'/auth.php';

@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\CustomersExport;
 use App\Models\Customer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Excel;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class CustomerController extends Controller
@@ -123,5 +125,13 @@ class CustomerController extends Controller
         $customer->delete();
         Alert::success('Customer Deleted', 'Customer  deleted');
         return redirect()->route('customers.index');
+    }
+
+    public function export()
+    {
+        Alert::success('Customer Exported', 'Customer  exported');
+        $excel = app()->make(Excel::class);
+
+        return $excel->download(new CustomersExport(), 'customers.xlsx');
     }
 }
