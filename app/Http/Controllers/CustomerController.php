@@ -30,7 +30,9 @@ class CustomerController extends Controller
      */
     public function store(Request $request)
     {
+
         $customer = new Customer();
+        $customer->user_id = auth()->user()->id;
         $customer->name = $request->name;
         $customer->email = $request->email;
         $customer->phone_number = $request->phone_number;
@@ -63,7 +65,10 @@ class CustomerController extends Controller
      */
     public function edit(string $id)
     {
+
         $customer = Customer::findOrFail($id);
+        $this->authorize('update', $customer);
+
         return view('customers.edit', compact('customer'));
     }
 
@@ -72,7 +77,11 @@ class CustomerController extends Controller
      */
     public function update(Request $request, string $id)
     {
+
         $customer = Customer::findOrFail($id);
+        $this->authorize('update', $customer);
+
+        $customer->user_id = auth()->user()->id;
         $customer->name = $request->name;
         $customer->email = $request->email;
         $customer->phone_number = $request->phone_number;
@@ -98,6 +107,8 @@ class CustomerController extends Controller
     public function destroy(string $id)
     {
         $customer = Customer::findOrFail($id);
+        $this->authorize('delete', $customer);
+
         $customer->delete();
         Alert::success('Customer Deleted', 'Customer  deleted');
         return redirect()->route('customers.index');
