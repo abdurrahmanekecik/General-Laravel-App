@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Customer;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class CustomerController extends Controller
@@ -22,6 +23,10 @@ class CustomerController extends Controller
      */
     public function create()
     {
+        if (Auth::user()->can('create-customers')) {
+            Alert::error('Customer Not Created', 'Oluşturma yetkiniz yok');
+            return redirect()->route('customers.index');
+        }
         return view ('customers.create');
     }
 
@@ -30,6 +35,7 @@ class CustomerController extends Controller
      */
     public function store(Request $request)
     {
+
 
         $customer = new Customer();
         $customer->user_id = auth()->user()->id;
@@ -108,6 +114,11 @@ class CustomerController extends Controller
     {
         $customer = Customer::findOrFail($id);
         $this->authorize('delete', $customer);
+
+        if (Auth::user()->can('delete-customers', $customer)) {
+            Alert::error('Customer Not Deleted', 'Silme yetkiniz yok');
+            return redirect()->route('customers.index');
+        }
 
         $customer->delete();
         Alert::success('Customer Deleted', 'Customer  deleted');
